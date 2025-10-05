@@ -1,5 +1,3 @@
-<img width="1710" height="1112" alt="Screenshot 2025-10-06 at 2 34 02 AM" src="https://github.com/user-attachments/assets/51df0ce8-9ccb-4e44-a529-673cda7d2698" /><img width="1706" height="923" alt="Screenshot 2025-10-06 at 2 07 02 AM" src="https://github.com/user-attachments/assets/063ba097-4b30-4f36-8a41-4108a5f28e4d" /># AI Career Advisor
-
 A comprehensive multi-agent AI system that provides personalized and actionable career advice using CrewAI framework.
 
 ## Features
