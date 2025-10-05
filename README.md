@@ -9,25 +9,6 @@ A comprehensive multi-agent AI system that provides personalized and actionable 
 - **Real-time Research**: Uses Brave Search for current market data and trends
 - **Comprehensive Reports**: Detailed markdown reports with actionable insights
 
-## Screenshots
-
-### Demo Landing Page
-![Demo Page](careeradvisor/Screenshot%202025-10-06%20at%202.12.09%20AM.png)
-
-### Main Application Interface
-![Main App](careeradvisor/Screenshot%202025-10-06%20at%202.07.02%20AM.png)
-
-### Career Analysis Process
-![Analysis Process](careeradvisor/Screenshot%202025-10-06%20at%202.06.19%20AM.png)
-
-### Report Generation
-![Report Generation](careeradvisor/Screenshot%202025-10-06%20at%202.05.44%20AM.png)
-
-### Results Display
-![Results](careeradvisor/Screenshot%202025-10-06%20at%202.05.05%20AM.png)
-
-### API Testing
-![API Testing](careeradvisor/Screenshot%202025-10-06%20at%202.03.21%20AM.png)
 
 ## Agent Roles
 
