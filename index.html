@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Advisor - Discover Your Perfect Career Path</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            animation: slideInUp 1s ease-out 0.5s both;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .card-header h2 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 40px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed {
+            background: #10b981;
+            color: white;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 2px;
+            background: #e5e7eb;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1em;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .checkbox-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .checkbox-item label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            text-align: center;
+            line-height: 1.3;
+            min-height: 60px;
+            justify-content: center;
+        }
+
+        .checkbox-item input[type="radio"]:checked + label {
+            border-color: #4f46e5;
+            background: #eff6ff;
+            color: #4f46e5;
+        }
+
+        .checkbox-item label::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item input[type="radio"]:checked + label::before {
+            background: #4f46e5;
+            border-color: #4f46e5;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-1.708-1.708L6 8.086 3.854 5.94l-1.708 1.708L6 11.5l8.854-8.854z'/%3e%3c/svg%3e");
+        }
+
+        /* Resume Upload Styles */
+        .resume-upload-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .resume-upload-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resume-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .resume-file-name {
+            color: #4f46e5;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .resume-info {
+            margin-top: 8px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .spinner {
+            width: 100%;
+            height: 100%;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 1.2em;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .loading-steps {
+            list-style: none;
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .loading-steps li {
+            padding: 8px 0;
+            color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+
+        .loading-steps li.active {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .loading-steps li::before {
+            content: '⟳';
+            margin-right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-steps li.active::before {
+            opacity: 1;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Results Container */
+        .results-container {
+            display: none;
+            padding: 40px;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-header h3 {
+            font-size: 2.2em;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .result-header p {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .start-over-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .start-over-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .radio-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-rocket"></i> AI Career Advisor</h1>
+            <p>Discover your perfect career path with AI-powered insights and personalized guidance</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Card Header -->
+            <div class="card-header">
+                <h2>Start Your Career Journey</h2>
+                <p>Get personalized career recommendations from our AI-powered analysis</p>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-container" id="formContainer">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" id="step1">1</div>
+                    <div class="step" id="step2">2</div>
+                    <div class="step" id="step3">3</div>
+                    <div class="step" id="step4">4</div>
+                </div>
+
+                <form id="careerForm">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" id="formStep1">
+                        <div class="input-group">
+                            <label for="name"><i class="fas fa-user"></i> Your Name</label>
+                            <input type="text" id="name" name="name" class="input-field" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="stage"><i class="fas fa-graduation-cap"></i> Current Stage</label>
+                            <select id="stage" name="stage" class="input-field" required onchange="toggleResumeOption()">
+                                <option value="">Select your current stage</option>
+                                <option value="high-school">High School Student</option>
+                                <option value="college">College Student</option>
+                                <option value="recent-graduate">Recent Graduate</option>
+                                <option value="working-professional">Working Professional</option>
+                                <option value="career-changer">Looking for Career Change</option>
+                            </select>
+                        </div>
+
+                        <!-- Resume Upload Option for Professionals and College Students -->
+                        <div class="input-group" id="resumeOption" style="display: none;">
+                            <label><i class="fas fa-file-upload"></i> Resume Analysis (Optional)</label>
+                            <div class="help-text" style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                <p style="margin: 0; color: #0369a1; font-weight: 500;">
+                                    <i class="fas fa-info-circle"></i> <strong>Resume Analysis:</strong> 
+                                    Upload your resume for AI-powered analysis of missing skills, career gaps, and improvement recommendations. 
+                                    This provides more personalized and detailed career guidance.
+                                </p>
+                            </div>
+                            <div class="resume-upload-container">
+                                <input type="file" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx" style="display: none;">
+                                <button type="button" class="resume-upload-btn" onclick="document.getElementById('resumeFile').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i> Choose Resume File
+                                </button>
+                                <span id="resumeFileName" class="resume-file-name"></span>
+                            </div>
+                            <div class="resume-info">
+                                <small style="color: #6b7280; font-size: 0.9em;">
+                                    <i class="fas fa-info-circle"></i> Supported formats: PDF, DOC, DOCX (Max 10MB)
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <div></div>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+        <!-- Step 2: Interests & Passions -->
+        <div class="form-step" id="formStep2">
+            <div class="input-group">
+                <label><i class="fas fa-heart"></i> Select Your Primary Interest</label>
+                <div class="help-text" style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #0369a1; font-weight: 500;">
+                        <i class="fas fa-info-circle"></i> <strong>Choose your main interest:</strong> 
+                        Select the ONE area that excites you most. This helps our AI provide more focused and relevant career guidance.
+                    </p>
+                </div>
+                <div class="radio-group">
+                    <!-- Row 1: Short options -->
+                    <div class="radio-item">
+                        <input type="radio" id="tech" name="interests" value="Technology">
+                        <label for="tech">Technology</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="business" name="interests" value="Business">
+                        <label for="business">Business</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="creative" name="interests" value="Creative Arts">
+                        <label for="creative">Creative Arts</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="healthcare" name="interests" value="Healthcare">
+                        <label for="healthcare">Healthcare</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="science" name="interests" value="Science">
+                        <label for="science">Science</label>
+                    </div>
+                    
+                    <!-- Row 2: Short options -->
+                    <div class="radio-item">
+                        <input type="radio" id="medical" name="interests" value="Medical">
+                        <label for="medical">Medical</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="finance" name="interests" value="Finance">
+                        <label for="finance">Finance</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="social" name="interests" value="Social Impact">
+                        <label for="social">Social Impact</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="engineering" name="interests" value="Engineering">
+                        <label for="engineering">Engineering</label>
+                    </div>
+                    <div class="radio-item">
+                        <!-- Empty space for alignment -->
+                    </div>
+                    
+                    <!-- Row 3: All longer options -->
+                    <div class="radio-item">
+                        <input type="radio" id="law" name="interests" value="Law, Public Safety & Government">
+                        <label for="law">Law, Public Safety & Government</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="trades" name="interests" value="Skilled Trades & Manual Arts">
+                        <label for="trades">Skilled Trades & Manual Arts</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="hospitality" name="interests" value="Hospitality & Tourism">
+                        <label for="hospitality">Hospitality & Tourism</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="agriculture" name="interests" value="Agriculture & Natural Resources">
+                        <label for="agriculture">Agriculture & Natural Resources</label>
+                    </div>
+                    <div class="radio-item">
+                        <!-- Empty space for alignment -->
+                    </div>
+                </div>
+            </div>
+
+                        <div class="input-group">
+                            <label for="passions"><i class="fas fa-fire"></i> Tell us about your passions</label>
+                            <textarea id="passions" name="passions" class="input-field" placeholder="What activities, subjects, or causes are you passionate about? What gets you excited?" required></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Skills & Experience -->
+                    <div class="form-step" id="formStep3">
+                        <div class="input-group">
+                            <label for="skills"><i class="fas fa-tools"></i> Your Skills & Experience</label>
+                            <textarea id="skills" name="skills" class="input-field" placeholder="List your technical skills, soft skills, work experience, internships, projects, or relevant coursework..." required></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="achievements"><i class="fas fa-trophy"></i> Notable Achievements (Optional)</label>
+                            <textarea id="achievements" name="achievements" class="input-field" placeholder="Awards, certifications, leadership roles, successful projects, etc."></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Goals & Aspirations -->
+                    <div class="form-step" id="formStep4">
+                        <div class="help-text" style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <p style="margin: 0; color: #0369a1; font-weight: 500;">
+                                <i class="fas fa-info-circle"></i> <strong>Don't know what to write?</strong> That's perfectly normal for high school students! 
+                                You can leave these fields blank or write "Not sure yet" - our AI will help you discover your path based on your interests and strengths.
+                            </p>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="goals"><i class="fas fa-target"></i> Career Goals & Aspirations <span style="color: #6b7280; font-weight: normal;">(Optional)</span></label>
+                            <textarea id="goals" name="goals" class="input-field" placeholder="What are your career goals? Where do you see yourself in 5-10 years? (Leave blank if you're not sure - that's totally fine!)"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="preferences"><i class="fas fa-sliders-h"></i> Work Preferences <span style="color: #6b7280; font-weight: normal;">(Optional)</span></label>
+                            <textarea id="preferences" name="preferences" class="input-field" placeholder="Work style preferences like remote vs office, big company vs startup, etc. (Leave blank if you don't know yet!)"></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-magic"></i> Generate Career Report
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading Container -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-animation">
+                    <div class="spinner"></div>
+                </div>
+                <div class="loading-text">Analyzing your profile and generating personalized recommendations...</div>
+                <ul class="loading-steps">
+                    <li id="loadStep1">Analyzing your profile and interests</li>
+                    <li id="loadStep2">Researching suitable career paths</li>
+                    <li id="loadStep3">Identifying required skills and resources</li>
+                    <li id="loadStep4">Analyzing current job market trends</li>
+                    <li id="loadStep5">Creating strategic career roadmap</li>
+                    <li id="loadStep6">Curating learning resources</li>
+                    <li id="loadStep7">Generating comprehensive report</li>
+                </ul>
+            </div>
+
+            <!-- Results Container -->
+            <div class="results-container" id="resultsContainer">
+                <div class="result-header">
+                    <h3><i class="fas fa-check-circle" style="color: #10b981;"></i> Your Career Report is Ready!</h3>
+                    <p>Your personalized career guidance has been generated successfully.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        <button class="download-btn" onclick="downloadReport()">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                        <button class="start-over-btn" onclick="startOver()">
+                            <i class="fas fa-redo"></i> Start Over
+                        </button>
+                    </div>
+                </div>
+                <div id="reportContent" style="margin-top: 30px; padding: 20px; background: #f9fafb; border-radius: 12px; white-space: pre-wrap; font-family: 'Courier New', monospace; line-height: 1.6;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let reportData = '';
+
+        // Initialize particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Navigation functions
+        function nextStep() {
+            console.log(`🔄 Next step called, current step: ${currentStep}`);
+            
+            if (validateCurrentStep()) {
+                if (currentStep < 4) {
+                    // Hide current form step
+                    const currentFormStep = document.getElementById(`formStep${currentStep}`);
+                    if (currentFormStep) {
+                        currentFormStep.classList.remove('active');
+                        currentFormStep.style.display = 'none';
+                    }
+                    
+                    // Update progress indicator for current step
+                    const currentProgressStep = document.getElementById(`step${currentStep}`);
+                    if (currentProgressStep) {
+                        currentProgressStep.classList.remove('active');
+                        currentProgressStep.classList.add('completed');
+                    }
+                    
+                    currentStep++;
+                    console.log(`✅ Moved to step: ${currentStep}`);
+                    
+                    // Show next form step
+                    const nextFormStep = document.getElementById(`formStep${currentStep}`);
+                    if (nextFormStep) {
+                        nextFormStep.classList.add('active');
+                        nextFormStep.style.display = 'block';
+                        console.log(`✅ Form step ${currentStep} displayed`);
+                    } else {
+                        console.log(`❌ Form step ${currentStep} not found`);
+                    }
+                    
+                    // Update progress indicator for next step
+                    const nextProgressStep = document.getElementById(`step${currentStep}`);
+                    if (nextProgressStep) {
+                        nextProgressStep.classList.add('active');
+                        console.log(`✅ Progress step ${currentStep} activated`);
+                    } else {
+                        console.log(`❌ Progress step ${currentStep} not found`);
+                    }
+                } else {
+                    console.log('🎯 All steps completed, submitting form...');
+                    submitForm();
+                }
+            } else {
+                console.log('❌ Current step validation failed');
+            }
+        }
+
+        function prevStep() {
+            console.log(`🔄 Previous step called, current step: ${currentStep}`);
+            
+            if (currentStep > 1) {
+                // Hide current form step
+                const currentFormStep = document.getElementById(`formStep${currentStep}`);
+                if (currentFormStep) {
+                    currentFormStep.classList.remove('active');
+                    currentFormStep.style.display = 'none';
+                }
+                
+                // Update progress indicator for current step
+                const currentProgressStep = document.getElementById(`step${currentStep}`);
+                if (currentProgressStep) {
+                    currentProgressStep.classList.remove('active');
+                    currentProgressStep.classList.remove('completed');
+                }
+                
+                currentStep--;
+                console.log(`✅ Moved to step: ${currentStep}`);
+                
+                // Show previous form step
+                const prevFormStep = document.getElementById(`formStep${currentStep}`);
+                if (prevFormStep) {
+                    prevFormStep.classList.add('active');
+                    prevFormStep.style.display = 'block';
+                    console.log(`✅ Form step ${currentStep} displayed`);
+                }
+                
+                // Update progress indicator for previous step
+                const prevProgressStep = document.getElementById(`step${currentStep}`);
+                if (prevProgressStep) {
+                    prevProgressStep.classList.add('active');
+                    console.log(`✅ Progress step ${currentStep} activated`);
+                }
+            }
+        }
+
+        function validateCurrentStep() {
+            const currentStepElement = document.getElementById(`formStep${currentStep}`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    field.focus();
+                    field.style.borderColor = '#ef4444';
+                    setTimeout(() => {
+                        field.style.borderColor = '#e5e7eb';
+                    }, 2000);
+                    return false;
+                }
+            }
+
+            // Special validation for step 2 (interests)
+            if (currentStep === 2) {
+                const checkedInterests = document.querySelectorAll('input[name="interests"]:checked');
+                if (checkedInterests.length === 0) {
+                    alert('Please select your primary interest area.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Form submission
+        document.getElementById('careerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateCurrentStep()) {
+                return;
+            }
+
+            // Show loading
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('loadingContainer').style.display = 'block';
+
+            // Simulate loading steps
+            const loadingSteps = [
+                'loadStep1', 'loadStep2', 'loadStep3', 'loadStep4', 
+                'loadStep5', 'loadStep6', 'loadStep7'
+            ];
+
+            for (let i = 0; i < loadingSteps.length; i++) {
+                setTimeout(() => {
+                    if (i > 0) {
+                        document.getElementById(loadingSteps[i-1]).classList.remove('active');
+                    }
+                    document.getElementById(loadingSteps[i]).classList.add('active');
+                }, i * 2000);
+            }
+
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                stage: document.getElementById('stage').value,
+                interests: Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value),
+                passions: document.getElementById('passions').value,
+                skills: document.getElementById('skills').value,
+                achievements: document.getElementById('achievements').value,
+                goals: document.getElementById('goals').value,
+                preferences: document.getElementById('preferences').value
+            };
+
+            // Handle resume file if uploaded
+            const resumeFile = document.getElementById('resumeFile').files[0];
+            if (resumeFile) {
+                console.log('📄 Resume file detected:', resumeFile.name);
+                formData.hasResume = true;
+                formData.resumeFileName = resumeFile.name;
+                formData.resumeFileSize = resumeFile.size;
+                formData.resumeFileType = resumeFile.type;
+            } else {
+                formData.hasResume = false;
+            }
+
+            // Format user info for the backend
+            let userInfo = `
+Name: ${formData.name}
+Current Stage: ${formData.stage}
+Interests: ${formData.interests.join(', ')}
+Passions: ${formData.passions}
+Skills & Experience: ${formData.skills}
+Achievements: ${formData.achievements}
+Career Goals: ${formData.goals || 'Not specified - looking for guidance'}
+Work Preferences: ${formData.preferences || 'Open to all options - seeking recommendations'}
+            `.trim();
+
+            // Add resume information if uploaded
+            if (formData.hasResume) {
+                userInfo += `
+
+Resume Analysis: User has uploaded a resume for AI analysis
+Resume File: ${formData.resumeFileName}
+File Type: ${formData.resumeFileType}
+File Size: ${(formData.resumeFileSize / 1024 / 1024).toFixed(2)} MB
+
+Note: This user is a ${formData.stage} and has provided their resume for comprehensive analysis. 
+Please analyze their resume content, identify missing skills, career gaps, and provide specific improvement recommendations.
+Focus on resume optimization, skill development, and career advancement strategies.
+                `;
+            }
+
+            try {
+                // Call your backend API
+                const response = await fetch('/api/generate-career-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_info: userInfo })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    reportData = result.report;
+                    
+                    // Show results
+                    setTimeout(() => {
+                        document.getElementById('loadingContainer').style.display = 'none';
+                        document.getElementById('resultsContainer').style.display = 'block';
+                        document.getElementById('reportContent').textContent = reportData;
+                    }, 14000);
+                } else {
+                    throw new Error('Failed to generate report');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Fallback: show demo report after loading animation
+                setTimeout(() => {
+                    reportData = generateDemoReport(formData);
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                    document.getElementById('reportContent').textContent = reportData;
+                }, 14000);
+            }
+        });
+
+        function generateDemoReport(formData) {
+            return `# AI Career Advisor Report for ${formData.name}
+
+## Executive Summary
+Based on your profile analysis, we've identified several promising career paths that align with your interests in ${formData.interests.join(', ')} and your career goals.
+
+## Recommended Career Paths
+
+### 1. Software Engineer
+- Match Score: 92%
+- Growth Potential: High
+- Salary Range: $70,000 - $150,000+
+
+### 2. Product Manager
+- Match Score: 87%
+- Growth Potential: Very High
+- Salary Range: $80,000 - $180,000+
+
+### 3. Data Scientist
+- Match Score: 84%
+- Growth Potential: High
+- Salary Range: $75,000 - $160,000+
+
+## Skills Development Plan
+1. Technical Skills: Python, SQL, Machine Learning
+2. Soft Skills: Communication, Leadership, Problem-solving
+3. Certifications: AWS, Google Cloud, Agile/Scrum
+
+## Learning Resources
+- Coursera: Machine Learning Specialization
+- Udemy: Complete Web Development Bootcamp
+- LinkedIn Learning: Project Management Fundamentals
+
+## 6-Month Action Plan
+- Month 1-2: Complete Python fundamentals course
+- Month 3-4: Build 2-3 portfolio projects
+- Month 5-6: Apply for internships/entry-level positions
+
+## Market Insights
+The tech industry continues to show strong growth with increasing demand for professionals skilled in AI, cloud computing, and data analysis.
+
+Generated by AI Career Advisor - ${new Date().toLocaleDateString()}`;
+        }
+
+        function downloadReport() {
+            const blob = new Blob([reportData], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'career-report.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Show specific step function
+        function showStep(stepNumber) {
+            console.log(`📋 Showing step ${stepNumber}`);
+            
+            // Hide all steps first
+            const steps = document.querySelectorAll('.step');
+            steps.forEach(step => {
+                step.style.display = 'none';
+            });
+            
+            // Show the specific step
+            const targetStep = document.getElementById(`step${stepNumber}`);
+            if (targetStep) {
+                targetStep.style.display = 'block';
+                console.log(`✅ Step ${stepNumber} displayed`);
+            } else {
+                console.log(`❌ Step ${stepNumber} not found`);
+            }
+            
+            // Update progress indicators
+            const progressSteps = document.querySelectorAll('.progress-step');
+            progressSteps.forEach((progressStep, index) => {
+                if (index + 1 <= stepNumber) {
+                    progressStep.classList.add('active');
+                } else {
+                    progressStep.classList.remove('active');
+                }
+            });
+        }
+
+        function startOver() {
+            try {
+                console.log('🔄 Starting over...');
+                
+                // Force hide all containers first
+                const resultsContainer = document.getElementById('resultsContainer');
+                const formContainer = document.getElementById('formContainer');
+                const loadingContainer = document.getElementById('loadingContainer');
+                
+                if (resultsContainer) {
+                    resultsContainer.style.display = 'none';
+                    console.log('✅ Results container hidden');
+                }
+                
+                if (loadingContainer) {
+                    loadingContainer.style.display = 'none';
+                    console.log('✅ Loading container hidden');
+                }
+                
+                if (formContainer) {
+                    formContainer.style.display = 'block';
+                    console.log('✅ Form container shown');
+                }
+                
+                // Reset all form data
+                const form = document.getElementById('careerForm');
+                if (form) {
+                    form.reset();
+                    console.log('✅ Form reset');
+                }
+                
+                // Clear any selected interests (radio buttons)
+                const interestRadios = document.querySelectorAll('input[name="interests"]');
+                interestRadios.forEach(radio => {
+                    radio.checked = false;
+                });
+                console.log('✅ Radio buttons cleared');
+                
+                // Clear resume file if uploaded
+                const resumeFile = document.getElementById('resumeFile');
+                if (resumeFile) {
+                    resumeFile.value = '';
+                    const fileName = document.getElementById('resumeFileName');
+                    if (fileName) {
+                        fileName.textContent = '';
+                    }
+                    console.log('✅ Resume file cleared');
+                }
+                
+                // Hide resume skip option if visible
+                const resumeSkipOption = document.getElementById('resumeSkipOption');
+                if (resumeSkipOption) {
+                    resumeSkipOption.style.display = 'none';
+                    console.log('✅ Resume skip option hidden');
+                }
+                
+                // Reset to first step
+                currentStep = 1;
+                
+                // Hide all form steps first
+                const formSteps = document.querySelectorAll('.form-step');
+                formSteps.forEach((step, index) => {
+                    step.style.display = 'none';
+                    step.classList.remove('active');
+                    console.log(`✅ Form step ${index + 1} hidden`);
+                });
+                
+                // Show first form step (name and stage)
+                const firstFormStep = document.getElementById('formStep1');
+                if (firstFormStep) {
+                    firstFormStep.style.display = 'block';
+                    firstFormStep.classList.add('active');
+                    console.log('✅ First form step (name & stage) displayed');
+                } else {
+                    console.log('❌ formStep1 not found');
+                }
+                
+                // Reset progress indicators properly
+                const progressSteps = document.querySelectorAll('.progress-step');
+                progressSteps.forEach((progressStep, index) => {
+                    // Remove all classes first
+                    progressStep.classList.remove('active', 'completed');
+                    
+                    // Only activate the first step
+                    if (index === 0) {
+                        progressStep.classList.add('active');
+                        console.log('✅ Progress step 1 activated');
+                    } else {
+                        console.log(`✅ Progress step ${index + 1} reset`);
+                    }
+                });
+                
+                // Also reset the step circles in the progress bar
+                const stepCircles = document.querySelectorAll('.step');
+                stepCircles.forEach((stepCircle, index) => {
+                    stepCircle.classList.remove('active', 'completed');
+                    if (index === 0) {
+                        stepCircle.classList.add('active');
+                        console.log('✅ Step circle 1 activated');
+                    }
+                });
+                
+                // Clear report data
+                reportData = '';
+                const reportContent = document.getElementById('reportContent');
+                if (reportContent) {
+                    reportContent.innerHTML = '';
+                    console.log('✅ Report content cleared');
+                }
+                
+                // Reset progress bar if visible
+                const progressBar = document.querySelector('.progress-bar');
+                if (progressBar) {
+                    progressBar.style.display = 'none';
+                    console.log('✅ Progress bar hidden');
+                }
+                
+                // Scroll to top of page
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                console.log('✅ Scrolled to top');
+                
+                // Show a brief success message
+                const startOverMessage = document.createElement('div');
+                startOverMessage.innerHTML = '<i class="fas fa-refresh"></i> Starting new career analysis...';
+                startOverMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideInRight 0.3s ease;
+                `;
+                
+                document.body.appendChild(startOverMessage);
+                
+                // Remove the message after 2 seconds
+                setTimeout(() => {
+                    startOverMessage.remove();
+                }, 2000);
+                
+                console.log('🎉 Start over completed successfully!');
+                
+            } catch (error) {
+                console.error('❌ Error in startOver function:', error);
+                
+                // Fallback: just reload the page
+                window.location.reload();
+            }
+        }
+
+        // Resume Upload Functions
+        function toggleResumeOption() {
+            const stage = document.getElementById('stage').value;
+            const resumeOption = document.getElementById('resumeOption');
+            
+            // Show resume option for college students, recent graduates, working professionals, and career changers
+            if (stage === 'college' || stage === 'recent-graduate' || stage === 'working-professional' || stage === 'career-changer') {
+                resumeOption.style.display = 'block';
+            } else {
+                resumeOption.style.display = 'none';
+                // Clear resume file if hidden
+                document.getElementById('resumeFile').value = '';
+                document.getElementById('resumeFileName').textContent = '';
+            }
+        }
+
+        // Handle resume file selection
+        document.getElementById('resumeFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileName = document.getElementById('resumeFileName');
+            const stage = document.getElementById('stage').value;
+            
+            if (file) {
+                // Validate file size (10MB max)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be less than 10MB');
+                    this.value = '';
+                    fileName.textContent = '';
+                    return;
+                }
+                
+                // Validate file type
+                const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please upload a PDF, DOC, or DOCX file');
+                    this.value = '';
+                    fileName.textContent = '';
+                    return;
+                }
+                
+                fileName.textContent = `📄 ${file.name}`;
+                console.log('✅ Resume file selected:', file.name);
+                
+                // Show skip option for professionals and college students
+                if (stage === 'college' || stage === 'recent-graduate' || stage === 'working-professional' || stage === 'career-changer') {
+                    showResumeSkipOption();
+                }
+            } else {
+                fileName.textContent = '';
+                hideResumeSkipOption();
+            }
+        });
+
+        // Show resume skip option
+        function showResumeSkipOption() {
+            const resumeOption = document.getElementById('resumeOption');
+            const skipOption = document.getElementById('resumeSkipOption');
+            
+            if (!skipOption) {
+                const skipDiv = document.createElement('div');
+                skipDiv.id = 'resumeSkipOption';
+                skipDiv.innerHTML = `
+                    <div class="resume-skip-option" style="background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                        <p style="margin: 0; color: #166534; font-weight: 500;">
+                            <i class="fas fa-magic"></i> <strong>Resume Analysis Mode:</strong> 
+                            Since you've uploaded your resume, you can skip the detailed questions and let our AI analyze your resume directly for personalized career guidance.
+                        </p>
+                        <div style="margin-top: 10px;">
+                            <button type="button" class="btn btn-success" onclick="skipToAnalysis()" style="background: #22c55e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                                <i class="fas fa-rocket"></i> Analyze Resume & Generate Report
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="hideResumeSkipOption()" style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500; margin-left: 10px;">
+                                <i class="fas fa-arrow-right"></i> Continue with Questions
+                            </button>
+                        </div>
+                    </div>
+                `;
+                resumeOption.appendChild(skipDiv);
+            } else {
+                skipOption.style.display = 'block';
+            }
+        }
+
+        // Hide resume skip option
+        function hideResumeSkipOption() {
+            const skipOption = document.getElementById('resumeSkipOption');
+            if (skipOption) {
+                skipOption.style.display = 'none';
+            }
+        }
+
+        // Skip to analysis with resume
+        function skipToAnalysis() {
+            console.log('🚀 Skipping to resume analysis...');
+            
+            // Hide form and show loading
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('loadingContainer').style.display = 'block';
+            
+            // Start loading animation
+            const loadingSteps = ['step1', 'step2', 'step3', 'step4'];
+            for (let i = 0; i < loadingSteps.length; i++) {
+                setTimeout(() => {
+                    document.getElementById(loadingSteps[i]).classList.add('active');
+                }, i * 2000);
+            }
+            
+            // Prepare resume-based form data
+            const formData = {
+                name: document.getElementById('name').value,
+                stage: document.getElementById('stage').value,
+                hasResume: true,
+                resumeFileName: document.getElementById('resumeFile').files[0].name,
+                resumeFileSize: document.getElementById('resumeFile').files[0].size,
+                resumeFileType: document.getElementById('resumeFile').files[0].type,
+                skipQuestions: true
+            };
+
+            // Format user info for resume analysis
+            const userInfo = `
+Name: ${formData.name}
+Current Stage: ${formData.stage}
+Resume Analysis: User has uploaded a resume for comprehensive AI analysis
+Resume File: ${formData.resumeFileName}
+File Type: ${formData.resumeFileType}
+File Size: ${(formData.resumeFileSize / 1024 / 1024).toFixed(2)} MB
+
+IMPORTANT: This user has chosen to skip the detailed questions and wants AI to analyze their resume directly.
+Please provide a comprehensive career analysis based on their resume content, including:
+1. Current skills and experience assessment
+2. Missing skills and career gaps
+3. Resume optimization recommendations
+4. Career advancement strategies
+5. Market alignment suggestions
+6. Professional development roadmap
+
+Focus on resume-based insights and provide actionable recommendations for career growth.
+            `;
+
+            // Call the API with resume analysis
+            callCareerAPI(userInfo);
+        }
+
+        // Format report for better readability - Executive Summary only
+        function formatReport(report) {
+            // Create executive summary header
+            let formattedReport = `
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; text-align: center;">
+                    <h1 style="margin: 0 0 10px 0; font-size: 2.5em;">🎯 Your Career Report</h1>
+                    <p style="margin: 0; font-size: 1.2em; opacity: 0.9;">Personalized AI-powered career guidance</p>
+                </div>
+            `;
+            
+            // Extract and format key insights
+            const keyInsights = extractKeyInsights(report);
+            formattedReport += formatKeyInsights(keyInsights);
+            
+            // Extract top career recommendations (limit to 3)
+            const careerPaths = extractCareerPaths(report).slice(0, 3);
+            formattedReport += formatCareerPaths(careerPaths);
+            
+            // Extract immediate action plan (next 3-6 months only)
+            const actionPlan = extractImmediateActionPlan(report);
+            formattedReport += formatImmediateActionPlan(actionPlan);
+            
+            // Add download section for full report
+            formattedReport += formatDownloadSection();
+            
+            return formattedReport;
+        }
+        
+        // Extract key insights from report
+        function extractKeyInsights(report) {
+            const insights = [];
+            
+            // Look for key insights patterns
+            if (report.includes('Software Engineer')) {
+                insights.push({
+                    title: 'Primary Recommendation',
+                    content: 'Software Engineer - Best entry point with versatile skillset',
+                    icon: '💻'
+                });
+            }
+            
+            if (report.includes('AI') || report.includes('Machine Learning')) {
+                insights.push({
+                    title: 'Future Opportunity',
+                    content: 'AI/ML Engineering - High growth potential for specialization',
+                    icon: '🤖'
+                });
+            }
+            
+            if (report.includes('Data Science') || report.includes('Data Analyst')) {
+                insights.push({
+                    title: 'Alternative Path',
+                    content: 'Data Science - Strong demand across all industries',
+                    icon: '📊'
+                });
+            }
+            
+            return insights;
+        }
+        
+        // Format key insights section
+        function formatKeyInsights(insights) {
+            let html = `
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;">
+                    <h3 style="color: #1e293b; margin: 0 0 20px 0; font-size: 1.5em;">🔍 Key Insights</h3>
+                    <div style="display: grid; gap: 15px;">
+            `;
+            
+            insights.forEach(insight => {
+                html += `
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 1.5em;">${insight.icon}</span>
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: #1e293b; font-size: 1.1em;">${insight.title}</h4>
+                            <p style="margin: 0; color: #64748b; font-size: 0.95em;">${insight.content}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        // Extract career paths from report
+        function extractCareerPaths(report) {
+            const paths = [];
+            
+            // Look for career path sections
+            if (report.includes('Software Engineer')) {
+                paths.push({
+                    title: 'Software Engineer',
+                    description: 'Design, develop, and maintain applications and systems',
+                    salary: '$65K - $205K',
+                    demand: 'High',
+                    pros: ['High demand', 'Excellent salary', 'Remote work options'],
+                    icon: '💻'
+                });
+            }
+            
+            if (report.includes('AI') || report.includes('Machine Learning')) {
+                paths.push({
+                    title: 'AI/ML Engineer',
+                    description: 'Develop artificial intelligence tools and machine learning models',
+                    salary: '$98K - $300K+',
+                    demand: 'Exceptional',
+                    pros: ['Highest growth', 'Premium salaries', 'Cutting-edge work'],
+                    icon: '🤖'
+                });
+            }
+            
+            if (report.includes('Data Scientist') || report.includes('Data Analyst')) {
+                paths.push({
+                    title: 'Data Scientist',
+                    description: 'Analyze data to extract insights and support business decisions',
+                    salary: '$58K - $180K',
+                    demand: 'Strong',
+                    pros: ['High demand', 'Good work-life balance', 'Transferable skills'],
+                    icon: '📊'
+                });
+            }
+            
+            return paths;
+        }
+        
+        // Format career paths section
+        function formatCareerPaths(paths) {
+            let html = `
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;">
+                    <h3 style="color: #1e293b; margin: 0 0 20px 0; font-size: 1.5em;">🚀 Top Career Paths</h3>
+                    <div style="display: grid; gap: 20px;">
+            `;
+            
+            paths.forEach(path => {
+                html += `
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; position: relative;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <span style="font-size: 2em;">${path.icon}</span>
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; color: #1e293b; font-size: 1.3em;">${path.title}</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 0.95em;">${path.description}</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div style="background: #f1f5f9; padding: 10px; border-radius: 6px; text-align: center;">
+                                <div style="color: #64748b; font-size: 0.9em; margin-bottom: 5px;">Salary Range</div>
+                                <div style="color: #1e293b; font-weight: 600;">${path.salary}</div>
+                            </div>
+                            <div style="background: #f1f5f9; padding: 10px; border-radius: 6px; text-align: center;">
+                                <div style="color: #64748b; font-size: 0.9em; margin-bottom: 5px;">Market Demand</div>
+                                <div style="color: #1e293b; font-weight: 600;">${path.demand}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 12px;">
+                            <div style="color: #0369a1; font-weight: 600; margin-bottom: 8px;">Key Benefits:</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                ${path.pros.map(pro => `<span style="background: #0ea5e9; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">${pro}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        // Extract immediate action plan (3-6 months only)
+        function extractImmediateActionPlan(report) {
+            return [
+                'Complete Python programming course',
+                'Learn basic data structures and algorithms',
+                'Start building personal projects',
+                'Create and optimize LinkedIn profile',
+                'Learn SQL and database concepts',
+                'Build portfolio with 3+ projects'
+            ];
+        }
+        
+        // Format immediate action plan (3-6 months only)
+        function formatImmediateActionPlan(actionPlan) {
+            return `
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;">
+                    <h3 style="color: #1e293b; margin: 0 0 20px 0; font-size: 1.5em;">📋 Your Next Steps (3-6 Months)</h3>
+                    
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            ${actionPlan.map((item, index) => `
+                                <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 12px;">
+                                    <span style="background: #0ea5e9; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9em;">${index + 1}</span>
+                                    <span style="color: #374151; font-weight: 500;">${item}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Format download section for full report
+        function formatDownloadSection() {
+            return `
+                <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 25px;">
+                    <h3 style="margin: 0 0 15px 0; font-size: 1.8em;">📄 Get Your Complete Career Report</h3>
+                    <p style="margin: 0 0 25px 0; opacity: 0.9; font-size: 1.1em;">
+                        This is your executive summary. Download the full report for detailed market analysis, 
+                        complete roadmap, learning resources, and comprehensive career guidance.
+                    </p>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="downloadFullReport()" style="background: white; color: #3b82f6; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-download"></i> Download Full Report
+                        </button>
+                        <button onclick="startOver()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 15px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-redo"></i> Start New Analysis
+                        </button>
+                        <button onclick="window.location.reload()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 15px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-refresh"></i> Reload Page
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.9em; opacity: 0.8;">
+                        <strong>Full Report Includes:</strong> Complete market analysis, detailed salary ranges, 
+                        comprehensive learning roadmap, networking strategies, and industry insights.
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Download full report function
+        function downloadFullReport() {
+            if (reportData) {
+                const blob = new Blob([reportData], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'complete-career-report.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Full report downloaded successfully!';
+                successMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #22c55e, #16a34a);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideInRight 0.3s ease;
+                `;
+                
+                document.body.appendChild(successMessage);
+                
+                // Remove the message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            }
+        }
+
+        // Call career API function
+        async function callCareerAPI(userInfo) {
+            try {
+                console.log('🚀 Calling career API with resume analysis...');
+                
+                const response = await fetch('/api/generate-career-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_info: userInfo })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    console.log('✅ Career report generated successfully!');
+                    
+                    // Hide loading and show results
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                    
+                    // Display the report with formatting
+                    const reportContent = document.getElementById('reportContent');
+                    reportContent.innerHTML = formatReport(data.report);
+                    reportData = data.report;
+                } else {
+                    throw new Error('Failed to generate report');
+                }
+            } catch (error) {
+                console.error('❌ Error generating career report:', error);
+                
+                // Hide loading and show error
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('resultsContainer').style.display = 'block';
+                
+                // Show error message
+                document.getElementById('reportContent').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #dc2626;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 20px;"></i>
+                        <h3>Oops! Something went wrong</h3>
+                        <p>We encountered an error while analyzing your resume. Please try again or contact support.</p>
+                        <button onclick="startOver()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-top: 20px;">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
+    </script>
+</body>
+</html>

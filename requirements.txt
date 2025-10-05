@@ -1,0 +1,8 @@
+crewai
+crewai_tools
+python-dotenv
+langchain-google-genai
+google-generativeai
+fastapi
+uvicorn[standard]
+python-multipart

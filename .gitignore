@@ -1,0 +1,116 @@
+# ====================================
+# 🔐 Environment Variables & Secrets
+# ====================================
+.env
+.env.*
+config.json
+secrets.json
+api_keys.txt
+
+# ==========================
+# 🐍 Python Build Artifacts
+# ==========================
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.manifest
+*.spec
+*.log
+
+# ========================
+# ⚙️ Python Tools / Libs
+# ========================
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+.Python
+.python-version
+pip-log.txt
+Pipfile.lock
+poetry.lock
+.pdm.toml
+
+# ====================
+# 🧪 Testing / Coverage
+# ====================
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.pytype/
+.mypy_cache/
+.pyre/
+.dmypy.json
+hypothesis/
+.pybuilder/
+target/
+
+# ======================
+# 🧠 AI / Project Output
+# ======================
+career_report.md
+crew_output/
+agent_output/
+*.crew
+uploads/
+downloads/
+temp/
+tmp/
+
+# ======================
+# 🚫 Simple Agent Files (Not for main project)
+# ======================
+agent.py
+Agents.py
+finance.py
+simple_agent/
+
+# ========================
+# 📦 Static / Generated Files
+# ========================
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.old
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ======================
+# 🧑‍💻 IDE / Editor Files
+# ======================
+.vscode/
+.idea/
+*.sublime-*
+*.iml
+.spyderproject
+.spyproject
+.ropeproject
+
+# ====================
+# 🖥 OS-specific Files
+# ====================
+.DS_Store
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

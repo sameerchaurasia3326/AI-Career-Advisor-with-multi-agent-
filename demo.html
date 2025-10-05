@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Advisor - Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .demo-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            animation: slideInUp 1s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+            background: linear-gradient(45deg, #fff, #f0f9ff, #fff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite, gradientShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+            to { text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            margin: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        .features {
+            margin-top: 40px;
+            text-align: left;
+            animation: fadeInUp 1s ease-out 1.5s both;
+        }
+        
+        .feature {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideInLeft 0.6s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature:nth-child(1) { animation-delay: 1.8s; }
+        .feature:nth-child(2) { animation-delay: 2.0s; }
+        .feature:nth-child(3) { animation-delay: 2.2s; }
+        .feature:nth-child(4) { animation-delay: 2.4s; }
+        .feature:nth-child(5) { animation-delay: 2.6s; }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .feature:hover {
+            transform: translateX(10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature:hover::before {
+            opacity: 1;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 20px;
+            margin-right: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+        
+        /* Pulse animation for the container */
+        .demo-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
+            border-radius: 22px;
+            z-index: -1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Floating animation for the rocket emoji */
+        .rocket {
+            display: inline-block;
+            animation: rocketFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes rocketFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(0deg); }
+            75% { transform: translateY(-5px) rotate(-5deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .demo-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="demo-container">
+        <h1><span class="rocket">🚀</span> AI Career Advisor</h1>
+        <p>Experience the power of AI-driven career guidance with our beautiful interactive platform</p>
+        
+        <a href="/app" class="btn">🌟 Try Full Application</a>
+        <a href="#" onclick="showDemo()" class="btn">📱 Quick Demo</a>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="icon">🤖</span>
+                <strong>7 AI Agents:</strong> Specialized agents for comprehensive career analysis
+            </div>
+            <div class="feature">
+                <span class="icon">⚡</span>
+                <strong>5 LLM Providers:</strong> Load balanced across Gemini, Perplexity, and Claude
+            </div>
+            <div class="feature">
+                <span class="icon">🎨</span>
+                <strong>Beautiful UI:</strong> Modern, responsive design with smooth animations
+            </div>
+            <div class="feature">
+                <span class="icon">📊</span>
+                <strong>Real-time Data:</strong> Current job market insights and trending skills
+            </div>
+            <div class="feature">
+                <span class="icon">📋</span>
+                <strong>Comprehensive Reports:</strong> Detailed career roadmaps with actionable steps
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random position
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Add interactive hover effects
+        function addInteractiveEffects() {
+            const features = document.querySelectorAll('.feature');
+            const buttons = document.querySelectorAll('.btn');
+            
+            // Add ripple effect to buttons
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        pointer-events: none;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // Add staggered animation to features on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            });
+            
+            features.forEach(feature => {
+                observer.observe(feature);
+            });
+        }
+        
+        // Enhanced demo modal with animations
+        function showDemo() {
+            const demoContent = `
+                <div style="text-align: left; font-family: 'Inter', sans-serif;">
+                    <h2 style="color: #4f46e5; margin-bottom: 20px; animation: slideInDown 0.5s ease-out;">🎉 Demo Features:</h2>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.1s both;">✨ Interactive 4-step form</li>
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.2s both;">🎨 Beautiful animations and transitions</li>
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.3s both;">🤖 Real AI-powered analysis</li>
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.4s both;">📊 Personalized career recommendations</li>
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.5s both;">📋 Downloadable career reports</li>
+                        <li style="margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 8px; border-left: 4px solid #3b82f6; animation: slideInLeft 0.6s ease-out 0.6s both;">⚡ Fast and responsive interface</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #6b7280; font-style: italic; animation: fadeIn 0.8s ease-out 0.7s both;">
+                        Click "Try Full Application" to experience the complete AI Career Advisor!
+                    </p>
+                </div>
+            `;
+            
+            // Create modal with enhanced animations
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                max-width: 500px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                color: #333;
+                animation: slideInUp 0.5s ease-out;
+                position: relative;
+            `;
+            
+            modalContent.innerHTML = demoContent;
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Add CSS animations for modal content
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideInUp {
+                    from { transform: translateY(30px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                @keyframes slideInDown {
+                    from { transform: translateY(-20px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                @keyframes slideInLeft {
+                    from { transform: translateX(-20px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                        document.head.removeChild(style);
+                    }, 300);
+                }
+            });
+            
+            // Add close button with animation
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '✕';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: #666;
+                transition: all 0.3s ease;
+            `;
+            closeBtn.onmouseover = () => {
+                closeBtn.style.transform = 'scale(1.2)';
+                closeBtn.style.color = '#ff4444';
+            };
+            closeBtn.onmouseout = () => {
+                closeBtn.style.transform = 'scale(1)';
+                closeBtn.style.color = '#666';
+            };
+            closeBtn.onclick = () => {
+                modal.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                    document.head.removeChild(style);
+                }, 300);
+            };
+            modalContent.appendChild(closeBtn);
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            addInteractiveEffects();
+            
+            // Add entrance animation to the main container
+            const container = document.querySelector('.demo-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(50px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 1s ease-out';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
